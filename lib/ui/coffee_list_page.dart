@@ -31,6 +31,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
   void dispose() {
     _sliderPageController.removeListener(_pageListener);
     _sliderPageController.dispose();
+    _titlePageController.dispose();
     super.dispose();
   }
 
@@ -56,7 +57,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
             height: MediaQuery.of(context).size.height * .15,
             child: PageView.builder(
               itemCount: coffeeList.length,
-              physics: const BouncingScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               controller: _titlePageController,
               itemBuilder: (context, index) {
                 return Padding(

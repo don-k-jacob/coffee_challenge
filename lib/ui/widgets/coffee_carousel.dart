@@ -87,7 +87,7 @@ class _CoffeeImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       coffee.pathImage,
-      fit: BoxFit.fill,
+      fit: BoxFit.contain,
     );
   }
 }
