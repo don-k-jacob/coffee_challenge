@@ -10,8 +10,7 @@ class CoffeeCarousel extends StatelessWidget {
     @required double percent,
     @required this.coffeeList,
     @required int index,
-  })
-      : _percent = percent,
+  })  : _percent = percent,
         _index = index,
         super(key: key);
 
@@ -25,52 +24,61 @@ class CoffeeCarousel extends StatelessWidget {
       builder: (context, constraints) {
         final height = constraints.maxHeight;
         return Stack(
+          alignment: Alignment.center,
           children: [
             // Third coffee
             if (_index > 1)
-              Positioned(
-                top: 0.0,
-                bottom: lerpDouble((height * .4), (height * .6), _percent),
-                left: lerpDouble(100, 150, _percent),
-                right: lerpDouble(100, 150, _percent),
+              Transform.scale(
+                scale: lerpDouble(.4, 0, _percent),
+                alignment: Alignment.topCenter,
                 child: Opacity(
                     opacity: 1.0 - _percent,
                     child: _CoffeeImage(
+                      parentSize: constraints.biggest,
                       coffee: coffeeList[_index - 2],
                     )),
               ),
 
             // Second coffee
             if (_index > 0)
-              Positioned(
-                  top: lerpDouble((height * .1), 0, _percent),
-                  bottom: lerpDouble((height * .2), (height * .4), _percent),
-                  right: lerpDouble(50, 100, _percent),
-                  left: lerpDouble(50, 100, _percent),
+              Transform.translate(
+                offset: Offset(0, lerpDouble((height * .1), 0, _percent)),
+                child: Transform.scale(
+                  scale: lerpDouble(.7, .4, _percent),
+                  alignment: Alignment.topCenter,
                   child: _CoffeeImage(
+                    parentSize: constraints.biggest,
                     coffee: coffeeList[_index - 1],
-                  )),
+                  ),
+                ),
+              ),
 
             // First coffee
-            Positioned(
-              top: lerpDouble((height * .22), (height * .1), _percent),
-              bottom: lerpDouble((height * .02), (height * .2), _percent),
-              right: lerpDouble(20, 50, _percent),
-              left: lerpDouble(20, 50, _percent),
-              child: _CoffeeImage(
-                coffee: coffeeList[_index],
+            Transform.translate(
+              offset: Offset(
+                  0, lerpDouble((height * .25), (height * .1), _percent)),
+              child: Transform.scale(
+                scale: lerpDouble(1.0, .7, _percent),
+                alignment: Alignment.topCenter,
+                child: _CoffeeImage(
+                  parentSize: constraints.biggest,
+                  coffee: coffeeList[_index],
+                ),
               ),
             ),
 
             // Hide bottom coffee
-            Positioned(
-              top: lerpDouble(height, (height * .22), _percent),
-              bottom: lerpDouble(-(height * .4), (height * .02), _percent),
-              right: lerpDouble(0, 20, _percent),
-              left: lerpDouble(0, 20, _percent),
-              child: _CoffeeImage(
-                coffee:
-                coffeeList[(_index + 1).clamp(0, coffeeList.length - 1) ],
+            Transform.translate(
+              offset:
+                  Offset(0, lerpDouble(height * 1.3, (height * .25), _percent)),
+              child: Transform.scale(
+                alignment: Alignment.center,
+                scale: lerpDouble(1.5, 1.0, _percent),
+                child: _CoffeeImage(
+                  parentSize: constraints.biggest,
+                  coffee:
+                      coffeeList[(_index + 1).clamp(0, coffeeList.length - 1)],
+                ),
               ),
             ),
           ],
@@ -81,15 +89,23 @@ class CoffeeCarousel extends StatelessWidget {
 }
 
 class _CoffeeImage extends StatelessWidget {
+  const _CoffeeImage({
+    Key key,
+    @required this.coffee,
+    @required this.parentSize,
+  }) : super(key: key);
   final Coffee coffee;
-
-  const _CoffeeImage({Key key, @required this.coffee}) : super(key: key);
+  final Size parentSize;
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      coffee.pathImage,
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SizedBox(
+        height: parentSize.height * .7,
+        width: parentSize.width * .9,
+        child: Image.asset(coffee.pathImage, fit: BoxFit.fill,),
+      ),
     );
-
   }
 }
