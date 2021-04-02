@@ -104,9 +104,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.all(10),
-                    );
+                    return Container();
                   },
                 ),
               ],

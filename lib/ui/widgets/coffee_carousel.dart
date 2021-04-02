@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:coffee_challenge/model/coffee.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CoffeeCarousel extends StatelessWidget {
@@ -9,7 +10,8 @@ class CoffeeCarousel extends StatelessWidget {
     @required double percent,
     @required this.coffeeList,
     @required int index,
-  })  : _percent = percent,
+  })
+      : _percent = percent,
         _index = index,
         super(key: key);
 
@@ -24,7 +26,7 @@ class CoffeeCarousel extends StatelessWidget {
         final height = constraints.maxHeight;
         return Stack(
           children: [
-            // Last coffee
+            // Third coffee
             if (_index > 1)
               Positioned(
                 top: 0.0,
@@ -41,7 +43,7 @@ class CoffeeCarousel extends StatelessWidget {
             // Second coffee
             if (_index > 0)
               Positioned(
-                  top: lerpDouble((height * .08), 0, _percent),
+                  top: lerpDouble((height * .1), 0, _percent),
                   bottom: lerpDouble((height * .2), (height * .4), _percent),
                   right: lerpDouble(50, 100, _percent),
                   left: lerpDouble(50, 100, _percent),
@@ -49,9 +51,9 @@ class CoffeeCarousel extends StatelessWidget {
                     coffee: coffeeList[_index - 1],
                   )),
 
-            // Third coffee
+            // First coffee
             Positioned(
-              top: lerpDouble((height * .18), (height * .08), _percent),
+              top: lerpDouble((height * .22), (height * .1), _percent),
               bottom: lerpDouble((height * .02), (height * .2), _percent),
               right: lerpDouble(20, 50, _percent),
               left: lerpDouble(20, 50, _percent),
@@ -61,14 +63,14 @@ class CoffeeCarousel extends StatelessWidget {
             ),
 
             // Hide bottom coffee
-            Positioned.fill(
-              top: lerpDouble(height, height * .18, _percent),
+            Positioned(
+              top: lerpDouble(height, (height * .22), _percent),
               bottom: lerpDouble(-(height * .4), (height * .02), _percent),
               right: lerpDouble(0, 20, _percent),
               left: lerpDouble(0, 20, _percent),
               child: _CoffeeImage(
                 coffee:
-                    coffeeList[(_index + 1).clamp(0, coffeeList.length - 1)],
+                coffeeList[(_index + 1).clamp(0, coffeeList.length - 1) ],
               ),
             ),
           ],
@@ -87,7 +89,7 @@ class _CoffeeImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       coffee.pathImage,
-      fit: BoxFit.contain,
     );
+
   }
 }
