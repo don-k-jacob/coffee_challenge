@@ -36,6 +36,12 @@ class CoffeeAppBar extends StatelessWidget {
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
+                    child: FittedBox(
+                      child: Text(
+                        '1',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ),
                   ),
                 )
               ],

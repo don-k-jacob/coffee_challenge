@@ -3,9 +3,50 @@ import 'package:coffee_challenge/ui/widgets/coffee_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CoffeeOrderPage extends StatelessWidget {
+enum CoffeeSize { Small, Medium, Big }
+
+class CoffeeOrderPage extends StatefulWidget {
   const CoffeeOrderPage({Key key, this.coffee}) : super(key: key);
   final Coffee coffee;
+
+  @override
+  _CoffeeOrderPageState createState() => _CoffeeOrderPageState();
+}
+
+class _CoffeeOrderPageState extends State<CoffeeOrderPage> {
+  CoffeeSize _selectedCoffeeSize;
+  PageController _pageController;
+
+  @override
+  void initState() {
+    _selectedCoffeeSize = CoffeeSize.Medium;
+    _pageController = PageController(initialPage: 1);
+    super.initState();
+  }
+
+  void _changeCoffeeSize(CoffeeSize coffeeSize) {
+    _pageController.animateToPage(
+      coffeeSize.index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.fastOutSlowIn,
+    );
+    setState(() {
+      _selectedCoffeeSize = coffeeSize;
+    });
+  }
+
+  double _getSizePricePercent(CoffeeSize coffeeSize) {
+    switch (coffeeSize) {
+      case CoffeeSize.Small:
+        return 0.8;
+      case CoffeeSize.Medium:
+        return 1.0;
+      case CoffeeSize.Big:
+        return 1.2;
+      default:
+        return 1.0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +61,9 @@ class CoffeeOrderPage extends StatelessWidget {
           SizedBox(
             width: size.width * .65,
             child: Hero(
-              tag: coffee.name + "title",
+              tag: widget.coffee.name + "title",
               child: Text(
-                coffee.name,
+                widget.coffee.name,
                 style: Theme.of(context).textTheme.headline5,
                 maxLines: 2,
                 textAlign: TextAlign.center,
@@ -38,10 +79,23 @@ class CoffeeOrderPage extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 Positioned.fill(
-                  top: 20.0,
                   child: Hero(
-                    tag: coffee.name,
-                    child: Image.asset(coffee.pathImage),
+                    tag: widget.coffee.name,
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 60),
+                          child: Image.asset(widget.coffee.pathImage),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: Image.asset(widget.coffee.pathImage),
+                        ),
+                        Image.asset(widget.coffee.pathImage),
+                      ],
+                    ),
                   ),
                 ),
                 Align(
@@ -60,18 +114,36 @@ class CoffeeOrderPage extends StatelessWidget {
                         child: child,
                       );
                     },
-                    child: Text(
-                      "${coffee.price}\$",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(color: Colors.white, shadows: [
-                        Shadow(
-                          color: Colors.black38,
-                          blurRadius: 30,
-                        )
-                      ]),
-                    ),
+                    //------------------------------
+                    // Change Price Animation
+                    //------------------------------
+                    child: TweenAnimationBuilder(
+                        duration: const Duration(milliseconds: 600),
+                        tween: Tween(
+                          begin: 0.0,
+                          end: _getSizePricePercent(_selectedCoffeeSize),
+                        ),
+                        curve: Curves.fastOutSlowIn,
+                        builder: (context, value, _) {
+                          return Transform.scale(
+                            scale: value,
+                            child: Text(
+                              "${(widget.coffee.price * value).toStringAsFixed(1)}\$",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  .copyWith(
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black54,
+                                    blurRadius: 30,
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
                   ),
                 ),
                 Align(
@@ -121,14 +193,17 @@ class CoffeeOrderPage extends StatelessWidget {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(3, (index) {
+                children: List.generate(CoffeeSize.values.length, (index) {
+                  final coffeeSize = CoffeeSize.values[index];
+                  //----------------------------
+                  // Coffee Size Option
+                  //----------------------------
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: _CoffeeSizeOption(
-                      isSelected: index == 1,
-                      labelSize: ['s', 'm', 'b'][index],
-                      onTap: () {},
-                    ),
+                        isSelected: (coffeeSize == _selectedCoffeeSize),
+                        coffeeSize: coffeeSize,
+                        onTap: () => _changeCoffeeSize(coffeeSize)),
                   );
                 }),
               ),
@@ -203,16 +278,17 @@ class _CoffeeSizeOption extends StatelessWidget {
   const _CoffeeSizeOption({
     Key key,
     @required this.isSelected,
-    @required this.labelSize,
+    @required this.coffeeSize,
     @required this.onTap,
   }) : super(key: key);
 
   final bool isSelected;
-  final String labelSize;
+  final CoffeeSize coffeeSize;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final labelSize = coffeeSize.toString().split('.')[1][0].toLowerCase();
     return InkWell(
       onTap: onTap,
       splashColor: Colors.transparent,
