@@ -1,6 +1,8 @@
-# coffee_challenge
+# Coffee Challenge
 
-A new Flutter application.
+Result of the proposed challenge by Diego Velazquez (diegoveloper).
+## Demo
+<img src="https://media4.giphy.com/media/A2WkSqOmUBxZa91vWK/giphy.gif" width="240"/>|
 
 ## Getting Started
 
