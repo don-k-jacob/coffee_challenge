@@ -2,7 +2,8 @@
 
 Result of the proposed challenge by Diego Velazquez (diegoveloper).
 ## Demo
-<img src="https://media4.giphy.com/media/A2WkSqOmUBxZa91vWK/giphy.gif" width="240"/>|
+<img src="https://media4.giphy.com/media/A2WkSqOmUBxZa91vWK/giphy.gif" width="240"/>_________
+<img src="https://media3.giphy.com/media/WgxTvDbIRNxAHXO5wF/giphy.gif" width="240"/>
 
 ## Getting Started
 
