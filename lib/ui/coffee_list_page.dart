@@ -1,4 +1,6 @@
 import 'package:coffee_challenge/model/coffee.dart';
+import 'package:coffee_challenge/ui/coffee_order_page.dart';
+import 'package:coffee_challenge/ui/widgets/coffee_app_bar.dart';
 import 'package:coffee_challenge/ui/widgets/coffee_carousel.dart';
 import 'package:flutter/material.dart';
 
@@ -38,9 +40,25 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
   void _pageListener() {
     _index = _sliderPageController.page.floor();
     _percent = (_sliderPageController.page - _index).abs();
-    _titlePageController.position
+    _titlePageController
         .jumpTo(_sliderPageController.page * MediaQuery.of(context).size.width);
     setState(() {});
+  }
+
+  void _openOrderPage(BuildContext context, Coffee coffee) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return FadeTransition(
+            opacity: animation,
+            child: CoffeeOrderPage(
+              coffee: coffee,
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -49,7 +67,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
     return Scaffold(
       body: Column(
         children: [
-          const _CustomAppBar(),
+          const CoffeeAppBar(),
           //------------------------
           // Coffee names
           //------------------------
@@ -60,10 +78,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
               physics: const NeverScrollableScrollPhysics(),
               controller: _titlePageController,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 100.0),
-                  child: _TitleCoffee(coffee: coffeeList[index]),
-                );
+                return _TitleCoffee(coffee: coffeeList[index]);
               },
             ),
           ),
@@ -82,7 +97,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
                       stops: [0.75, 1.0],
                       colors: [
                         Colors.white,
-                        Colors.deepOrange[200],
+                        Color(0xFFbf7840),
                       ],
                     )),
                   ),
@@ -104,7 +119,9 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    return Container();
+                    return InkWell(
+                      onTap: () => _openOrderPage(context, coffeeList[_index]),
+                    );
                   },
                 ),
               ],
@@ -129,59 +146,25 @@ class _TitleCoffee extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          coffee.name,
-          style: Theme.of(context).textTheme.headline5,
-          maxLines: 2,
-          textAlign: TextAlign.center,
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .65,
+          child: Hero(
+            tag: coffee.name + "title",
+            child: Text(
+              coffee.name,
+              style: Theme.of(context).textTheme.headline5,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
         Text(
           "${coffee.price} US",
-          style: Theme.of(context).textTheme.subtitle1,
+          style: Theme.of(context).textTheme.headline6.copyWith(
+            color: Colors.brown[400]
+          ),
         ),
       ],
-    );
-  }
-}
-
-class _CustomAppBar extends StatelessWidget {
-  const _CustomAppBar({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {},
-          ),
-          Stack(
-            children: [
-              IconButton(
-                iconSize: 32,
-                icon: Icon(Icons.shopping_bag_outlined),
-                onPressed: () {},
-              ),
-              Positioned(
-                bottom: 8,
-                right: 8,
-                child: Container(
-                  height: 14,
-                  width: 14,
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

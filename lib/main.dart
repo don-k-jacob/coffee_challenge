@@ -26,10 +26,16 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: 28,
                 height: 1.2),
+            headline2: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 64),
+            headline6: GoogleFonts.poppins(
+                fontWeight: FontWeight.w500,
+                fontSize: 22),
             subtitle1: GoogleFonts.poppins(
               color: Colors.brown[400],
-              fontWeight: FontWeight.w500,
-              fontSize: 22,
+              fontWeight: FontWeight.w300,
+              fontSize: 18,
             ),
           )),
       home: CoffeeListPage(),
