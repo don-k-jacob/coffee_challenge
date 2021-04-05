@@ -85,13 +85,14 @@ class CoffeeHomePage extends StatelessWidget {
                             displacement: height * .23,
                             scale: 1.45,
                             isOverflowed: true,
+                            fixedScale: 1.2,
                             coffee: coffeeList[2],
                           ),
                           //----------------------------
                           // App Coffee Title
                           //----------------------------
                           Align(
-                            alignment: Alignment(0, .35),
+                            alignment: Alignment(0, .4),
                             child: Text.rich(
                               TextSpan(
                                 text: 'Fika',
@@ -115,6 +116,7 @@ class CoffeeHomePage extends StatelessWidget {
                           _CoffeeTransformedItem(
                             displacement: height * .75,
                             scale: 1.75,
+                            fixedScale: 1.5,
                             isOverflowed: true,
                             coffee: coffeeList[3],
                           ),
@@ -139,11 +141,13 @@ class _CoffeeTransformedItem extends StatelessWidget {
     @required this.coffee,
     this.endTransitionOpacity = 1.0,
     this.scale = 1.0,
+    this.fixedScale,
     this.isOverflowed = false,
   }) : super(key: key);
 
   final double displacement;
   final double scale;
+  final double fixedScale;
   final bool isOverflowed;
   final double endTransitionOpacity;
   final Coffee coffee;
@@ -163,7 +167,6 @@ class _CoffeeTransformedItem extends StatelessWidget {
               return AnimatedBuilder(
                 animation: animation,
                 builder: (_, child) {
-                  final fixedScale = (scale * .85);
                   return Transform.scale(
                     scale: isOverflowed
                         ? lerpDouble(fixedScale, 1.0, animation.value)

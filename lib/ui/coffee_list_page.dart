@@ -110,7 +110,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
           // Coffee names
           //------------------------
           SizedBox(
-            height: MediaQuery.of(context).size.height * .18,
+            height: MediaQuery.of(context).size.height * .17,
             child: PageView.builder(
               itemCount: coffeeList.length,
               physics: const NeverScrollableScrollPhysics(),
