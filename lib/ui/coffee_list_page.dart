@@ -59,13 +59,22 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
     );
   }
 
+  void _onBackPage(BuildContext context) async {
+    await _sliderPageController.animateToPage(2,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.fastOutSlowIn);
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final coffeeList = Coffee.coffeeList;
     return Scaffold(
       body: Column(
         children: [
-          const CoffeeAppBar(),
+          CoffeeAppBar(
+            onTapBack: () => _onBackPage(context),
+          ),
           //------------------------
           // Coffee names
           //------------------------
@@ -113,6 +122,11 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
                 //--------------------------------
                 PageView.builder(
                   controller: _sliderPageController,
+                  onPageChanged: (value) {
+                    _titlePageController.animateToPage(value,
+                        duration: kThemeChangeDuration,
+                        curve: Curves.fastOutSlowIn);
+                  },
                   itemCount: coffeeList.length,
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -159,8 +173,8 @@ class _TitleCoffee extends StatelessWidget {
         Text(
           "${coffee.price} €",
           style: Theme.of(context).textTheme.headline6.copyWith(
-            color: Colors.brown[400],
-          ),
+                color: Colors.brown[400],
+              ),
         ),
       ],
     );

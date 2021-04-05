@@ -28,60 +28,35 @@ class CoffeeCarousel extends StatelessWidget {
           children: [
             // Third coffee
             if (_index > 1)
-              Transform.scale(
+              _CoffeeTransforms(
+                coffee: coffeeList[_index - 2],
                 scale: lerpDouble(.3, 0, _percent),
-                alignment: Alignment.topCenter,
-                child: Opacity(
-                    opacity: lerpDouble(0.5, 0.0, _percent),
-                    child: _CoffeeImage(
-                      coffee: coffeeList[_index - 2],
-                    )),
+                opacity: lerpDouble(0.5, 0.0, _percent),
               ),
 
             // Second coffee
             if (_index > 0)
-              Transform.translate(
-                offset: Offset(0, lerpDouble((height * .1), 0, _percent)),
-                child: Transform.scale(
-                  scale: lerpDouble(.6, .3, _percent),
-                  alignment: Alignment.topCenter,
-                  child: Opacity(
-                    opacity: lerpDouble(0.8, 0.5, _percent),
-                    child: _CoffeeImage(
-                      coffee: coffeeList[_index - 1],
-                    ),
-                  ),
-                ),
+              _CoffeeTransforms(
+                coffee: coffeeList[_index - 1],
+                displacement: lerpDouble((height * .1), 0, _percent),
+                scale: lerpDouble(.6, .3, _percent),
+                opacity: lerpDouble(0.8, 0.5, _percent),
               ),
 
             // First coffee
-            Transform.translate(
-              offset: Offset(
-                  0, lerpDouble((height * .25), (height * .1), _percent)),
-              child: Transform.scale(
-                scale: lerpDouble(1.0, .6, _percent),
-                alignment: Alignment.topCenter,
-                child: Opacity(
-                  opacity: lerpDouble(1.0, 0.8, _percent),
-                  child: _CoffeeImage(
-                    coffee: coffeeList[_index],
-                  ),
-                ),
-              ),
+            _CoffeeTransforms(
+              coffee: coffeeList[_index],
+              displacement: lerpDouble((height * .25), (height * .1), _percent),
+              scale: lerpDouble(1.0, .6, _percent),
+              opacity: lerpDouble(1.0, 0.8, _percent),
             ),
 
             // Hide bottom coffee
             if (_index < coffeeList.length - 1)
-              Transform.translate(
-                offset: Offset(
-                    0, lerpDouble(height * 1.5, (height * .25), _percent)),
-                child: Transform.scale(
-                  alignment: Alignment.center,
-                  scale: lerpDouble(2.0, 1.0, _percent),
-                  child: _CoffeeImage(
-                    coffee: coffeeList[_index + 1],
-                  ),
-                ),
+              _CoffeeTransforms(
+                coffee: coffeeList[_index + 1],
+                displacement: lerpDouble(height, (height * .25), _percent),
+                scale: lerpDouble(2.0, 1.0, _percent),
               ),
           ],
         );
@@ -90,6 +65,37 @@ class CoffeeCarousel extends StatelessWidget {
   }
 }
 
+class _CoffeeTransforms extends StatelessWidget {
+  const _CoffeeTransforms(
+      {Key key,
+      @required this.coffee,
+      this.displacement = 0.0,
+      this.scale = 1.0,
+      this.opacity = 1.0})
+      : super(key: key);
+
+  final double displacement;
+  final double scale;
+  final double opacity;
+  final Coffee coffee;
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: Offset(0, displacement),
+      child: Transform.scale(
+        alignment: Alignment.topCenter,
+        scale: scale,
+        child: Opacity(
+          opacity: opacity,
+          child: _CoffeeImage(
+            coffee: coffee,
+          ),
+        ),
+      ),
+    );
+  }
+}
 class _CoffeeImage extends StatelessWidget {
   const _CoffeeImage({
     Key key,

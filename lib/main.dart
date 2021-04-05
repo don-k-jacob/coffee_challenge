@@ -1,4 +1,4 @@
-import 'package:coffee_challenge/ui/coffee_list_page.dart';
+import 'package:coffee_challenge/ui/coffee_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
               fontSize: 18,
             ),
           )),
-      home: CoffeeListPage(),
+      home: CoffeeHomePage(),
     );
   }
 }
