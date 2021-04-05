@@ -32,7 +32,7 @@ class CoffeeCarousel extends StatelessWidget {
                 scale: lerpDouble(.3, 0, _percent),
                 alignment: Alignment.topCenter,
                 child: Opacity(
-                    opacity: 1.0 - _percent,
+                    opacity: lerpDouble(0.5, 0.0, _percent),
                     child: _CoffeeImage(
                       coffee: coffeeList[_index - 2],
                     )),
@@ -45,8 +45,11 @@ class CoffeeCarousel extends StatelessWidget {
                 child: Transform.scale(
                   scale: lerpDouble(.6, .3, _percent),
                   alignment: Alignment.topCenter,
-                  child: _CoffeeImage(
-                    coffee: coffeeList[_index - 1],
+                  child: Opacity(
+                    opacity: lerpDouble(0.8, 0.5, _percent),
+                    child: _CoffeeImage(
+                      coffee: coffeeList[_index - 1],
+                    ),
                   ),
                 ),
               ),
@@ -58,8 +61,11 @@ class CoffeeCarousel extends StatelessWidget {
               child: Transform.scale(
                 scale: lerpDouble(1.0, .6, _percent),
                 alignment: Alignment.topCenter,
-                child: _CoffeeImage(
-                  coffee: coffeeList[_index],
+                child: Opacity(
+                  opacity: lerpDouble(1.0, 0.8, _percent),
+                  child: _CoffeeImage(
+                    coffee: coffeeList[_index],
+                  ),
                 ),
               ),
             ),

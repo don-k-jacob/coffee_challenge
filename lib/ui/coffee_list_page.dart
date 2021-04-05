@@ -40,8 +40,6 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
   void _pageListener() {
     _index = _sliderPageController.page.floor();
     _percent = (_sliderPageController.page - _index).abs();
-    _titlePageController
-        .jumpTo(_sliderPageController.page * MediaQuery.of(context).size.width);
     setState(() {});
   }
 
@@ -72,7 +70,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
           // Coffee names
           //------------------------
           SizedBox(
-            height: MediaQuery.of(context).size.height * .15,
+            height: 95.0,
             child: PageView.builder(
               itemCount: coffeeList.length,
               physics: const NeverScrollableScrollPhysics(),
@@ -159,9 +157,9 @@ class _TitleCoffee extends StatelessWidget {
           ),
         ),
         Text(
-          "${coffee.price} US",
+          "${coffee.price} €",
           style: Theme.of(context).textTheme.headline6.copyWith(
-            color: Colors.brown[400]
+            color: Colors.brown[400],
           ),
         ),
       ],

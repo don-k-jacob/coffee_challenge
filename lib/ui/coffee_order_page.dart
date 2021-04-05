@@ -86,11 +86,11 @@ class _CoffeeOrderPageState extends State<CoffeeOrderPage> {
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 60),
+                          padding: const EdgeInsets.only(top: 80),
                           child: Image.asset(widget.coffee.pathImage),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: const EdgeInsets.only(top: 40),
                           child: Image.asset(widget.coffee.pathImage),
                         ),
                         Image.asset(widget.coffee.pathImage),
