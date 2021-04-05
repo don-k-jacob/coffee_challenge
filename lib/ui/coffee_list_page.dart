@@ -4,10 +4,19 @@ import 'package:coffee_challenge/ui/widgets/coffee_app_bar.dart';
 import 'package:coffee_challenge/ui/widgets/coffee_carousel.dart';
 import 'package:flutter/material.dart';
 
+enum SliderAction {
+  Next,
+  Previous,
+  None,
+}
+
 class CoffeeListPage extends StatefulWidget {
   const CoffeeListPage({
     Key key,
+    @required this.initialAction,
   }) : super(key: key);
+
+  final SliderAction initialAction;
 
   @override
   _CoffeeListPageState createState() => _CoffeeListPageState();
@@ -26,6 +35,11 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
     _titlePageController = PageController(initialPage: _index);
     _percent = 0.0;
     _sliderPageController.addListener(_pageListener);
+
+    Future.delayed(const Duration(milliseconds: 400), () {
+      _initialAction(widget.initialAction);
+    });
+
     super.initState();
   }
 
@@ -59,6 +73,23 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
     );
   }
 
+  void _initialAction(SliderAction sliderAction) {
+    switch (sliderAction) {
+      case SliderAction.None:
+        break;
+      case SliderAction.Next:
+        _sliderPageController.nextPage(
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.fastOutSlowIn);
+        break;
+      case SliderAction.Previous:
+        _sliderPageController.previousPage(
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.fastOutSlowIn);
+        break;
+    }
+  }
+
   void _onBackPage(BuildContext context) async {
     await _sliderPageController.animateToPage(2,
         duration: const Duration(milliseconds: 800),
@@ -79,7 +110,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
           // Coffee names
           //------------------------
           SizedBox(
-            height: 95.0,
+            height: MediaQuery.of(context).size.height * .18,
             child: PageView.builder(
               itemCount: coffeeList.length,
               physics: const NeverScrollableScrollPhysics(),
@@ -124,7 +155,7 @@ class _CoffeeListPageState extends State<CoffeeListPage> {
                   controller: _sliderPageController,
                   onPageChanged: (value) {
                     _titlePageController.animateToPage(value,
-                        duration: kThemeChangeDuration,
+                        duration: const Duration(milliseconds: 400),
                         curve: Curves.fastOutSlowIn);
                   },
                   itemCount: coffeeList.length,

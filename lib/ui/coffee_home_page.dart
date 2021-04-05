@@ -7,16 +7,30 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CoffeeHomePage extends StatelessWidget {
-  void _openCoffeeListPage(BuildContext context) {
+  void _openCoffeeListPage(BuildContext context, SliderAction sliderAction) {
     Navigator.push(
       context,
       PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 600),
+        transitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (context, animation, secondaryAnimation) {
-          return FadeTransition(opacity: animation, child: CoffeeListPage());
+          return FadeTransition(
+              opacity: animation,
+              child: CoffeeListPage(
+                initialAction: sliderAction,
+              ));
         },
       ),
     );
+  }
+
+  void _onVerticalDragUpdate(BuildContext context, DragUpdateDetails details) {
+    print(details.primaryDelta);
+
+    if (details.primaryDelta > 2.0) {
+      _openCoffeeListPage(context, SliderAction.Previous);
+    } else if (details.primaryDelta < -2.0) {
+      _openCoffeeListPage(context, SliderAction.Next);
+    }
   }
 
   @override
@@ -49,8 +63,10 @@ class CoffeeHomePage extends StatelessWidget {
                   builder: (context, constraints) {
                     final height = constraints.maxHeight;
                     return GestureDetector(
-                      onTap: () => _openCoffeeListPage(context),
-                      onVerticalDragUpdate: (details) => _openCoffeeListPage(context),
+                      onTap: () =>
+                          _openCoffeeListPage(context, SliderAction.None),
+                      onVerticalDragUpdate: (details) =>
+                          _onVerticalDragUpdate(context, details),
                       child: Stack(
                         children: [
                           _CoffeeTransformedItem(
@@ -71,11 +87,14 @@ class CoffeeHomePage extends StatelessWidget {
                             isOverflowed: true,
                             coffee: coffeeList[2],
                           ),
+                          //----------------------------
+                          // App Coffee Title
+                          //----------------------------
                           Align(
                             alignment: Alignment(0, .35),
                             child: Text.rich(
                               TextSpan(
-                                text: 'Frika',
+                                text: 'Fika',
                                 children: [
                                   TextSpan(
                                     text: '\nCoffee',
